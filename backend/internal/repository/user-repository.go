@@ -9,6 +9,7 @@ import (
 
 type UserRepository interface {
 	FindByUsername(username string) (*models.User, error)
+	Create(user *models.User) (string, error)
 }
 
 type userRepository struct {
@@ -17,6 +18,26 @@ type userRepository struct {
 func NewUserRepository() UserRepository {
 	return &userRepository{}
 }
+
+var ErrUserNotFound = errors.New("user not found")
+
+
+func (r *userRepository) Create(user *models.User) (string, error) {
+	// query := `
+	// 	INSERT INTO users (username, password_hash)
+	// 	VALUES ($1, $2)
+	// 	RETURNING id
+	// `
+
+	// var id string
+	// err := r.db.QueryRow(query, user.Username, user.PasswordHash).Scan(&id)
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	return "", nil
+}
+
 
 func (r *userRepository) FindByUsername(username string) (*models.User, error) {
 	if username != "admin" {

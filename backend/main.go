@@ -1,9 +1,10 @@
-// cmd/api/main.go
 package main
 
 import (
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"backend/internal/foundations/db"
 	"backend/internal/handler"
@@ -23,15 +24,20 @@ func main() {
 
 	userRepo := repository.NewUserRepository()
 	passwordChecker := &password.BcryptChecker{}
-	tokenService := &jwt.JWTService{}
+
+	tokenService := jwt.NewJWTService(
+	os.Getenv("JWT_SECRET"),
+	time.Hour*24,
+)
 
 	authService := services.NewAuthService(
 		userRepo,
 		passwordChecker,
 		tokenService,
+
 	)
 
-	router := handler.NewRouter(authService)
+	router := handler.NewRouter(authService, tokenService)
 
 	server := http.Server{
 		Addr:    ":8080",
