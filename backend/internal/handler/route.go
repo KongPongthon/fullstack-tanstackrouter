@@ -9,18 +9,19 @@ import (
 )
 
 func NewRouter(authService *services.AuthService,jwtService jwt.Service,) http.Handler {
-	mux := http.NewServeMux()
+	root := http.NewServeMux()
 
 	authHandler := NewAuthHandler(authService)
 
-	mux.HandleFunc("/health", Health)
-	mux.HandleFunc("/v1/login", authHandler.Login)
-	mux.HandleFunc("/v1/register",authHandler.Register)
-	mux.Handle("/v1/profile",
-	middleware.AuthMiddleware(jwtService)(
-		http.HandlerFunc(ProfileHandler),
-	),
-)
+	root.Handle("/health", http.HandlerFunc(Health))
+	root.Handle("/v1/login", http.HandlerFunc(authHandler.Login))
+	root.Handle("/v1/register", http.HandlerFunc(authHandler.Register))
 
-	return mux
+	private := http.NewServeMux()
+	private.HandleFunc("/v1/profile", ProfileHandler)
+
+	root.Handle("/v1/",
+		middleware.AuthMiddleware(jwtService)(private),
+	)
+	return root
 }
