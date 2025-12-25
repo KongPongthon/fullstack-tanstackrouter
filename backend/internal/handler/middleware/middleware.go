@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"backend/internal/infra/jwt"
+	"backend/internal/foundations/jwt"
 	"context"
 	"net/http"
 	"strings"

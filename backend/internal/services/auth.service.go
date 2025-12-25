@@ -1,8 +1,8 @@
 package services
 
 import (
-	"backend/internal/infra/jwt"
-	"backend/internal/infra/password"
+	"backend/internal/foundations/jwt"
+	"backend/internal/foundations/password"
 	"backend/internal/models"
 	"backend/internal/repository"
 	"errors"

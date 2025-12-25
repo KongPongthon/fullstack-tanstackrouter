@@ -2,8 +2,8 @@
 package handler
 
 import (
+	"backend/internal/foundations/jwt"
 	"backend/internal/handler/middleware"
-	"backend/internal/infra/jwt"
 	"backend/internal/services"
 	"net/http"
 )
