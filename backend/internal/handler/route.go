@@ -18,7 +18,7 @@ func NewRouter(authService *services.AuthService,jwtService jwt.Service,) http.H
 	root.Handle("/v1/register", http.HandlerFunc(authHandler.Register))
 
 	private := http.NewServeMux()
-	private.HandleFunc("/v1/profile", ProfileHandler)
+	private.HandleFunc("/profile", ProfileHandler)
 
 	root.Handle("/v1/",
 		middleware.AuthMiddleware(jwtService)(private),

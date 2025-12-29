@@ -12,9 +12,13 @@ import (
 	"backend/internal/handler"
 	"backend/internal/repository"
 	"backend/internal/services"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	_ = godotenv.Load()
 
 	database, err := db.NewPostgres()
 	if err != nil {
@@ -26,24 +30,29 @@ func main() {
 	passwordChecker := &password.BcryptChecker{}
 
 	tokenService := jwt.NewJWTService(
-	os.Getenv("JWT_SECRET"),
-	time.Hour*24,
-)
+		os.Getenv("JWT_SECRET"),
+		time.Hour*24,
+	)
 
 	authService := services.NewAuthService(
 		userRepo,
 		passwordChecker,
 		tokenService,
-
 	)
 
 	router := handler.NewRouter(authService, tokenService)
-
+	
+	port := os.Getenv("PORT")
+	
+	if port == "" {
+		port = "8081"
+	}
+	log.Println("port", port)
 	server := http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: router,
 	}
 
-	log.Println("server started at :8080")
+	log.Println("server started at :" + port)
 	log.Fatal(server.ListenAndServe())
 }
