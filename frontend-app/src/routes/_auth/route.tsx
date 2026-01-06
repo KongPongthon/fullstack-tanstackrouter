@@ -1,13 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import AuthLayout from '../../components/layout/authLayout';
+import useAuthStore from '@/store/auth-store';
 
 export const Route = createFileRoute('/_auth')({
-  // beforeLoad: () => {
-  //   const isAuthenticated = useAuthStore.getState();
+  beforeLoad: () => {
+    const { accessToken } = useAuthStore.getState();
 
-  //   if (isAuthenticated.isAuthenticated) {
-  //     throw redirect({ to: '/' });
-  //   }
-  // },
+    if (accessToken) {
+      throw redirect({ to: '/dashboard' });
+    }
+  },
   component: AuthLayout,
 });

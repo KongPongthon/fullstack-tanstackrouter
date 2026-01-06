@@ -61,7 +61,6 @@ const CustomInput = ({
           value={value}
           onChange={onChange}
           className={cn(
-            'h-[46px]',
             icon && 'pl-12',
             suffixIcon && 'pr-12',
             disabled && 'bg-gray-50!',
